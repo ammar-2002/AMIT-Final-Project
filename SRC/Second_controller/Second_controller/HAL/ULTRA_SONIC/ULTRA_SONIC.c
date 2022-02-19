@@ -9,7 +9,6 @@
 
 u16 SOUND_SPEED = 34300; //AVERAGE SOUND SPEED IN CM/S
 u16 timer_overflow_1 = 0;
-u16 timer_overflow_2 = 0;
 
 
 void ULTRA_SONIC_INIT_1(void){
@@ -74,77 +73,6 @@ u16 MEASURE_DISTANCE_1(void){
     TCNT0 = 0;
     distance = (time_taken * (SOUND_SPEED/(float)2000000))/2;//distance in cm is returned || DIVIDE BY TWO BECAUSE EVERY OSCILATION INCREASE TWO TICKS
     return distance;
-}
-
-void ULTRA_SONIC_INIT_2(void){
-    //ENABLE GLOBALE INTERUPT
-    SET_BIT(SREG,7);
-    //TIMER0 OVERFLOW
-    SET_BIT(TIMSK,6);
-    //PIN MODE FOR TRIGGER
-    PIN_MODE(TRIGGER_PIN_2,OUTPUT);
-    //PIN MODE FOR ECHO
-    PIN_MODE(ECHO_PIN_2,INPUT);
-    //NORMAL OPERATION FOR ALL
-    TCCR2 = 0;
-    PIN_WRITE(TRIGGER_PIN_2,HIGH);
-}
-
-u16 MEASURE_DISTANCE_2(void){
-    u8 entered=0;
-    u8 done=0;
-    u64 time_taken;
-    u32 distance;
-    //SEND A ECHO
-    PIN_WRITE(TRIGGER_PIN_2,HIGH);
-    _delay_us(10);
-    PIN_WRITE(TRIGGER_PIN_2,LOW);
-    while(done != 1){
-        switch(PIN_READ(ECHO_PIN_2)){
-            case 0:
-            switch(entered){
-                case 0:
-                continue;
-                break;
-                case 1:
-                //TIMER STOP
-                CLR_BIT(TCCR2,0);
-                CLR_BIT(TCCR2,1);
-                CLR_BIT(TCCR2,2);
-                time_taken = (timer_overflow_2*256) + TCNT2;
-                entered=0;
-                done=1;
-                break;
-            }
-            break;
-            case 1:
-            switch(entered){
-                case 0:
-                //8 PRE SCALLER
-                CLR_BIT(TCCR2,0);
-                SET_BIT(TCCR2,1);
-                CLR_BIT(TCCR2,2);
-                entered=1;
-                break;
-                case 1:
-                continue;
-                break;
-            }
-            break;
-        }
-        if(done==1){
-            break;
-        }
-    }
-    //RESET TIMER
-    timer_overflow_2 = 0;
-    TCNT0 = 0;
-    distance = (time_taken * (SOUND_SPEED/(float)2000000))/2;//distance in cm is returned || DIVIDE BY TWO BECAUSE EVERY OSCILATION INCREASE TWO TICKS
-    return distance;
-}
-
-ISR(TIMER2_OVF_vect){
-    timer_overflow_2++;
 }
 
 ISR(TIMER0_OVF_vect){

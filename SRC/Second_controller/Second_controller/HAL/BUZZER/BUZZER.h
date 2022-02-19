@@ -9,8 +9,11 @@
 void BUZZER_INIT(u8);
 void BUZZER_ON(u8);
 void BUZZER_OFF(u8);
-void BUZZER_NEAR(u8);
-void BUZZER_INTERMEDIATE(u8);
-void BUZZER_FAR(u8);
+void BUZZER_NEAR_1(u8);
+void BUZZER_NEAR_2(u8);
+void BUZZER_INTERMEDIATE_1(u8);
+void BUZZER_INTERMEDIATE_2(u8);
+void BUZZER_FAR_1(u8);
+void BUZZER_FAR_2(u8);
 
 #endif /* BUZZER_H_ */

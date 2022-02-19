@@ -6,19 +6,22 @@
 
 int main(void){
     ULTRA_SONIC_INIT_1();
-    ULTRA_SONIC_INIT_2();
     BUZZER_INIT(BUZZER_0);
     u16 reading_1;
-    u16 reading_2;
     while(1){
         reading_1 = MEASURE_DISTANCE_1();
-        reading_2 = MEASURE_DISTANCE_2();
-        if(reading_1 < 10 || reading_2 < 10){
-            BUZZER_NEAR(BUZZER_0);
-        }else if(reading_1 < 20 || reading_2 < 20){
-            BUZZER_INTERMEDIATE(BUZZER_0);
-        }else if(reading_1 < 30 || reading_2 < 30){
-            BUZZER_FAR(BUZZER_0);
+        if(reading_1 < 5){
+            BUZZER_NEAR_1(BUZZER_0);
+        }else if(reading_1 < 10){
+            BUZZER_NEAR_2(BUZZER_0);
+        }else if(reading_1 < 15){
+            BUZZER_INTERMEDIATE_1(BUZZER_0);
+        }else if(reading_1 < 20){
+            BUZZER_INTERMEDIATE_2(BUZZER_0);
+        }else if(reading_1 < 25){
+            BUZZER_FAR_1(BUZZER_0);
+        }else if(reading_1 < 30){
+            BUZZER_FAR_2(BUZZER_0);
         }else{
             BUZZER_OFF(BUZZER_0);
         }
